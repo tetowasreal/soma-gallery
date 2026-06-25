@@ -6,24 +6,20 @@
 <title>광주소마고 갤러리</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f4f4f4;color:#222;font-size:14px}
-a{text-decoration:none;color:inherit}
-.wrap{max-width:900px;margin:0 auto;padding:14px 10px}
-
-.header{background:#1a5fb4;padding:12px 18px;margin-bottom:10px;border-radius:8px;display:flex;align-items:center;gap:10px}
-.header-logo{font-size:20px;font-weight:700;color:#fff}
-.header-sub{font-size:12px;color:#aecff5}
-
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0f2f5;color:#222;font-size:14px}
+.wrap{max-width:920px;margin:0 auto;padding:14px 10px}
+.header{background:#1a5fb4;padding:13px 18px;margin-bottom:10px;border-radius:8px;display:flex;align-items:center;gap:10px}
+.header-logo{font-size:19px;font-weight:700;color:#fff}
+.header-sub{font-size:12px;color:#aecff5;margin-top:2px}
 .tab-bar{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
 .tab{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#555}
 .tab.active{background:#1a5fb4;color:#fff;border-color:#1a5fb4}
-
 .board-top{display:flex;justify-content:flex-end;margin-bottom:6px}
-.btn{padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#222}
+.btn{padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#222;font-family:inherit}
 .btn-primary{background:#1a5fb4;color:#fff;border-color:#1a5fb4}
+.btn-danger{background:#c0392b;color:#fff;border-color:#c0392b}
 .btn:hover{opacity:0.85}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
-
 .board-header{display:grid;grid-template-columns:44px 1fr 90px 70px 50px;background:#dbe9fa;border:1px solid #b5cfed;border-bottom:none;border-radius:6px 6px 0 0;padding:7px 12px;font-size:12px;color:#1a5fb4;font-weight:700}
 .post-list{background:#fff;border:1px solid #b5cfed;border-radius:0 0 6px 6px;margin-bottom:10px;min-height:60px}
 .post-row{display:grid;grid-template-columns:44px 1fr 90px 70px 50px;padding:8px 12px;border-bottom:1px solid #eee;cursor:pointer;align-items:center}
@@ -32,7 +28,6 @@ a{text-decoration:none;color:inherit}
 .post-num{color:#999;font-size:12px;text-align:center}
 .post-title-cell{display:flex;align-items:center;gap:5px;overflow:hidden}
 .post-title{color:#222;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post-title:hover{color:#1a5fb4}
 .cmt-cnt{color:#c0392b;font-size:12px;font-weight:700;flex-shrink:0}
 .post-author{color:#666;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .post-date{color:#999;font-size:12px}
@@ -43,52 +38,59 @@ a{text-decoration:none;color:inherit}
 .badge-tag{background:#f0f0f0;color:#555;border:1px solid #ddd}
 .empty{color:#aaa;text-align:center;padding:30px;font-size:13px}
 .loading{color:#aaa;text-align:center;padding:30px;font-size:13px}
+.pagination{display:flex;gap:4px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.page-btn{padding:5px 11px;border-radius:5px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#333;font-family:inherit}
+.page-btn.active{background:#1a5fb4;color:#fff;border-color:#1a5fb4}
 
 /* 글보기 */
 .pv-wrap{display:none}
 .pv-wrap.show{display:block}
 .board-list-wrap.hidden{display:none}
-.back-btn{font-size:13px;color:#1a5fb4;cursor:pointer;margin-bottom:8px;background:none;border:none;display:inline-flex;align-items:center;gap:4px;padding:0}
+.back-btn{font-size:13px;color:#1a5fb4;cursor:pointer;margin-bottom:8px;background:none;border:none;display:inline-flex;align-items:center;gap:4px;padding:0;font-family:inherit}
 .pv-head{background:#fff;border:1px solid #b5cfed;border-radius:8px 8px 0 0;padding:14px 18px}
 .pv-title{font-size:17px;font-weight:700;margin-bottom:8px}
-.pv-meta{display:flex;gap:12px;font-size:12px;color:#888;flex-wrap:wrap}
+.pv-meta{display:flex;gap:12px;font-size:12px;color:#888;flex-wrap:wrap;align-items:center}
+.pv-actions{margin-left:auto;display:flex;gap:6px}
 .pv-body{background:#fff;border:1px solid #b5cfed;border-top:none;padding:18px;min-height:120px;font-size:14px;line-height:1.8;white-space:pre-wrap;word-break:break-all}
 .pv-react{background:#fff;border:1px solid #b5cfed;border-top:none;padding:12px 18px;display:flex;gap:10px}
-.react-btn{padding:6px 18px;border-radius:20px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#f8f8f8;color:#333;display:flex;align-items:center;gap:5px}
-.react-btn.up{border-color:#1a5fb4;color:#1a5fb4}
-.react-btn.down{border-color:#c0392b;color:#c0392b}
-
-/* 댓글 */
+.react-btn{padding:6px 18px;border-radius:20px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#f8f8f8;color:#333;display:flex;align-items:center;gap:5px;font-family:inherit}
+.react-btn.up{border-color:#1a5fb4;color:#1a5fb4;background:#f0f6ff}
+.react-btn.down{border-color:#c0392b;color:#c0392b;background:#fff5f5}
+.react-btn.voted{opacity:0.5;cursor:not-allowed}
 .cmt-section{background:#fff;border:1px solid #b5cfed;border-top:none;border-radius:0 0 8px 8px;margin-bottom:12px}
 .cmt-header{padding:10px 18px;border-bottom:1px solid #eee;font-size:13px;font-weight:700}
-.cmt-item{padding:10px 18px;border-bottom:1px solid #f0f0f0}
+.cmt-item{padding:10px 18px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .cmt-item:last-child{border-bottom:none}
+.cmt-left{flex:1}
 .cmt-meta{display:flex;gap:8px;font-size:12px;color:#888;margin-bottom:4px;align-items:center}
 .cmt-nick-tag{background:#dbe9fa;color:#1a5fb4;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700}
 .cmt-text{font-size:13px;line-height:1.6;color:#333;word-break:break-all}
+.cmt-del-btn{font-size:11px;color:#999;background:none;border:none;cursor:pointer;flex-shrink:0;padding:2px 6px;border-radius:4px;font-family:inherit}
+.cmt-del-btn:hover{background:#fee;color:#c0392b}
 .cmt-form{padding:12px 18px;border-top:1px solid #eee;display:flex;flex-direction:column;gap:8px}
 .cmt-inputs{display:flex;gap:6px;flex-wrap:wrap}
 .cmt-inputs input{padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;background:#fff;font-family:inherit}
 .cmt-row{display:flex;gap:6px;align-items:flex-end}
 .cmt-row textarea{flex:1;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;resize:none;height:64px;font-family:inherit}
 
-/* 글쓰기 모달 */
+/* 모달 */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:flex-start;justify-content:center;padding:40px 10px;overflow-y:auto}
 .modal-bg.show{display:flex}
 .modal{background:#fff;border-radius:10px;border:1px solid #ccc;width:100%;max-width:680px}
 .modal-head{padding:14px 18px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
 .modal-head h2{font-size:15px;font-weight:700}
-.modal-close{cursor:pointer;font-size:22px;color:#888;background:none;border:none;line-height:1}
+.modal-close{cursor:pointer;font-size:22px;color:#888;background:none;border:none;line-height:1;font-family:inherit}
 .modal-body{padding:16px 18px}
 .form-row{margin-bottom:12px}
 .form-row label{display:block;font-size:12px;color:#666;margin-bottom:4px;font-weight:700}
 .form-row input,.form-row textarea,.form-row select{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px;background:#fff;font-family:inherit}
 .form-row textarea{resize:vertical;min-height:140px}
 .form-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:8px}
+.notice{background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:8px 12px;font-size:12px;color:#795548;margin-bottom:12px}
 
-.pagination{display:flex;gap:4px;justify-content:center;margin-top:8px}
-.page-btn{padding:5px 11px;border-radius:5px;font-size:13px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#333}
-.page-btn.active{background:#1a5fb4;color:#fff;border-color:#1a5fb4}
+/* 도배 방지 알림 */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -128,6 +130,10 @@ a{text-decoration:none;color:inherit}
         <span id="pvAuthor"></span>
         <span id="pvDate"></span>
         <span>조회 <b id="pvView"></b></span>
+        <div class="pv-actions">
+          <button class="btn" style="font-size:12px;padding:4px 10px" onclick="openEdit()">수정</button>
+          <button class="btn btn-danger" style="font-size:12px;padding:4px 10px" onclick="openDeletePost()">삭제</button>
+        </div>
       </div>
     </div>
     <div class="pv-body" id="pvBody"></div>
@@ -141,7 +147,7 @@ a{text-decoration:none;color:inherit}
       <div class="cmt-form">
         <div class="cmt-inputs">
           <input type="text" id="cmtNick" placeholder="닉네임 (미입력 시 익명)" maxlength="12" style="width:150px">
-          <input type="password" id="cmtPw" placeholder="비밀번호" maxlength="12" style="width:120px">
+          <input type="password" id="cmtPw" placeholder="비밀번호 (삭제용)" maxlength="20" style="width:140px">
         </div>
         <div class="cmt-row">
           <textarea id="cmtText" placeholder="댓글을 입력하세요..."></textarea>
@@ -152,6 +158,7 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<!-- 글쓰기 모달 -->
 <div class="modal-bg" id="writeModal">
   <div class="modal">
     <div class="modal-head">
@@ -159,16 +166,13 @@ a{text-decoration:none;color:inherit}
       <button class="modal-close" onclick="closeWrite()">×</button>
     </div>
     <div class="modal-body">
+      <div class="notice">💡 비밀번호를 설정하면 나중에 수정/삭제할 수 있어요</div>
       <div class="form-row">
         <label>말머리</label>
         <select id="wTag">
           <option value="">말머리 없음</option>
-          <option>질문</option>
-          <option>유머</option>
-          <option>공부</option>
-          <option>급식</option>
-          <option>정보</option>
-          <option>공지</option>
+          <option>질문</option><option>유머</option><option>공부</option>
+          <option>급식</option><option>정보</option><option>공지</option>
         </select>
       </div>
       <div class="form-row">
@@ -176,8 +180,8 @@ a{text-decoration:none;color:inherit}
         <input type="text" id="wNick" placeholder="닉네임" maxlength="15">
       </div>
       <div class="form-row">
-        <label>비밀번호 (나중에 삭제할 때 필요해요)</label>
-        <input type="password" id="wPw" placeholder="비밀번호" maxlength="15">
+        <label>비밀번호</label>
+        <input type="password" id="wPw" placeholder="수정/삭제할 때 필요해요" maxlength="20">
       </div>
       <div class="form-row">
         <label>제목</label>
@@ -195,6 +199,64 @@ a{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<!-- 수정 모달 -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>글 수정</h2>
+      <button class="modal-close" onclick="closeEdit()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>비밀번호 확인</label>
+        <input type="password" id="ePw" placeholder="작성 시 입력한 비밀번호" maxlength="20">
+      </div>
+      <div class="form-row">
+        <label>말머리</label>
+        <select id="eTag">
+          <option value="">말머리 없음</option>
+          <option>질문</option><option>유머</option><option>공부</option>
+          <option>급식</option><option>정보</option><option>공지</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>제목</label>
+        <input type="text" id="eTitle" maxlength="80">
+      </div>
+      <div class="form-row">
+        <label>내용</label>
+        <textarea id="eBody"></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeEdit()">취소</button>
+        <button class="btn btn-primary" id="editBtn" onclick="submitEdit()">수정 완료</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 삭제 확인 모달 -->
+<div class="modal-bg" id="deleteModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head">
+      <h2 id="deleteModalTitle">글 삭제</h2>
+      <button class="modal-close" onclick="closeDeleteModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>비밀번호 확인</label>
+        <input type="password" id="delPw" placeholder="작성 시 입력한 비밀번호" maxlength="20">
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeDeleteModal()">취소</button>
+        <button class="btn btn-danger" id="delBtn" onclick="confirmDelete()">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
 const SUPABASE_URL = 'https://oezmlycjgdyspcwgutbv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lem1seWNqZ2R5c3Bjd2d1dGJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNjY3NDAsImV4cCI6MjA5Nzk0Mjc0MH0._MSyNQRcLls_px1haQhmBFAHAEiKwJppHIMjN-Bk0YY';
@@ -203,14 +265,28 @@ const PAGE_SIZE = 20;
 let currentTab = '전체';
 let currentPage = 1;
 let currentPost = null;
-let totalCount = 0;
+let deleteTarget = null; // {type:'post'} or {type:'comment', id}
+let votedPosts = JSON.parse(localStorage.getItem('votedPosts')||'{}');
+
+// 도배 방지: 글은 30초, 댓글은 15초
+const WRITE_COOLDOWN = 30000;
+const CMT_COOLDOWN = 15000;
 
 const ANON = ['익명','고양이','강아지','라면','피자','치킨','아이스크림','참새','수달','도토리'];
 function randAnon(){return ANON[Math.floor(Math.random()*ANON.length)]+(Math.floor(Math.random()*99)+1);}
 
+function escHtml(s){
+  return String(s||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
 function fmtDate(iso){
-  const d=new Date(iso);
-  const now=new Date();
+  if(!iso) return '';
+  const d=new Date(iso), now=new Date();
   const diff=(now-d)/1000;
   if(diff<60) return '방금';
   if(diff<3600) return Math.floor(diff/60)+'분 전';
@@ -218,106 +294,95 @@ function fmtDate(iso){
   return `${d.getMonth()+1}.${String(d.getDate()).padStart(2,'0')}`;
 }
 
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
 async function api(path, opts={}){
-  const headers = {
+  const headers={
     'apikey': SUPABASE_KEY,
     'Authorization': 'Bearer '+SUPABASE_KEY,
     'Content-Type': 'application/json',
   };
-  if(opts.prefer) headers['Prefer'] = opts.prefer;
-  const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
-    headers,
-    method: opts.method||'GET',
-    body: opts.body ? JSON.stringify(opts.body) : undefined
-  });
-  if(opts.method==='POST'||opts.method==='PATCH') return res;
-  if(!res.ok){ console.error('API error', res.status, path); return []; }
-  const text = await res.text();
-  if(!text) return [];
-  const parsed = JSON.parse(text);
-  return Array.isArray(parsed) ? parsed : [];
+  if(opts.prefer) headers['Prefer']=opts.prefer;
+  try {
+    const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
+      headers, method: opts.method||'GET',
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    });
+    if(opts.method==='POST'||opts.method==='PATCH'||opts.method==='DELETE') return res;
+    if(!res.ok){ console.error('API error',res.status,await res.text()); return []; }
+    const text = await res.text();
+    if(!text) return [];
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch(e){ console.error('fetch error',e); return []; }
 }
 
 async function loadPosts(){
   document.getElementById('postList').innerHTML='<div class="loading">불러오는 중...</div>';
   const filter = currentTab==='전체' ? '' : `&tag=eq.${encodeURIComponent(currentTab)}`;
-  const from=(currentPage-1)*PAGE_SIZE, to=from+PAGE_SIZE-1;
+  const offset = (currentPage-1)*PAGE_SIZE;
 
-  try {
-    const noticeUrl = `posts?select=*&is_notice=eq.true${filter}&order=created_at.desc`;
-    const postUrl = `posts?select=*&is_notice=eq.false${filter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${from}`;
-    console.log('fetching:', postUrl);
-    const notices = await api(noticeUrl);
-    const posts = await api(postUrl);
-    const comments = await api('comments?select=post_id&limit=1000');
-    console.log('notices:', notices, 'posts:', posts);
+  const [notices, posts, comments] = await Promise.all([
+    api(`posts?select=id,tag,title,author,view_count,up_count,created_at,is_notice&is_notice=eq.true${filter}&order=created_at.desc`),
+    api(`posts?select=id,tag,title,author,view_count,up_count,created_at,is_notice&is_notice=eq.false${filter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`),
+    api('comments?select=post_id&limit=2000')
+  ]);
 
-    const safeNotices = Array.isArray(notices) ? notices : [];
-    const safePosts = Array.isArray(posts) ? posts : [];
-    const safeComments = Array.isArray(comments) ? comments : [];
+  const cmtMap={};
+  comments.forEach(c=>{cmtMap[c.post_id]=(cmtMap[c.post_id]||0)+1;});
 
-    totalCount = safePosts.length + (currentPage > 1 ? from : 0);
+  const allPosts = currentPage===1 ? [...notices,...posts] : posts;
 
-    const cmtMap={};
-    safeComments.forEach(c=>{cmtMap[c.post_id]=(cmtMap[c.post_id]||0)+1;});
-
-    const allPosts = currentPage===1 ? [...safeNotices,...safePosts] : safePosts;
-
-    if(!allPosts.length){
-      document.getElementById('postList').innerHTML='<div class="empty">등록된 글이 없어요</div>';
-      renderPagination();
-      return;
-    }
-
-    let idx = from + safePosts.length;
-    document.getElementById('postList').innerHTML = allPosts.map((p,i)=>{
-      const isNotice = p.is_notice;
-      const num = isNotice ? '<span class="badge badge-notice">공지</span>' : (idx - (i - (currentPage===1 ? safeNotices.length : 0)));
-      const hot = p.up_count>=10 ? '<span class="badge badge-hot">HOT</span>' : '';
-      const tag = p.tag ? `<span class="badge badge-tag">${p.tag}</span>` : '';
-      const cmt = cmtMap[p.id] ? `<span class="cmt-cnt">[${cmtMap[p.id]}]</span>` : '';
-      return `<div class="post-row" onclick="openPost(${p.id})">
-        <span class="post-num">${num}</span>
-        <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}</span>
-        <span class="post-author">${escHtml(p.author)}</span>
-        <span class="post-date">${fmtDate(p.created_at)}</span>
-        <span class="post-view">${p.view_count}</span>
-      </div>`;
-    }).join('');
-
-    renderPagination();
-  } catch(e) {
-    console.error('loadPosts error:', e);
-    document.getElementById('postList').innerHTML='<div class="empty">불러오기 실패. 새로고침 해주세요.</div>';
+  if(!allPosts.length){
+    document.getElementById('postList').innerHTML='<div class="empty">등록된 글이 없어요</div>';
+    document.getElementById('pagination').innerHTML='';
+    return;
   }
+
+  document.getElementById('postList').innerHTML = allPosts.map((p,i)=>{
+    const isNotice = p.is_notice;
+    const rowNum = isNotice ? '<span class="badge badge-notice">공지</span>' : (offset + (i - (currentPage===1?notices.length:0)) + 1);
+    const hot = p.up_count>=10 ? '<span class="badge badge-hot">HOT</span>' : '';
+    const tag = p.tag ? `<span class="badge badge-tag">${escHtml(p.tag)}</span>` : '';
+    const cmt = cmtMap[p.id] ? `<span class="cmt-cnt">[${cmtMap[p.id]}]</span>` : '';
+    return `<div class="post-row" onclick="openPost(${p.id})">
+      <span class="post-num">${rowNum}</span>
+      <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}</span>
+      <span class="post-author">${escHtml(p.author)}</span>
+      <span class="post-date">${fmtDate(p.created_at)}</span>
+      <span class="post-view">${p.view_count}</span>
+    </div>`;
+  }).join('');
+
+  // 페이지네이션 (간단히 다음 버튼만)
+  const hasPrev = currentPage > 1;
+  const hasNext = posts.length === PAGE_SIZE;
+  let pg = '';
+  if(hasPrev) pg += `<button class="page-btn" onclick="goPage(${currentPage-1})">◀ 이전</button>`;
+  pg += `<button class="page-btn active">${currentPage}</button>`;
+  if(hasNext) pg += `<button class="page-btn" onclick="goPage(${currentPage+1})">다음 ▶</button>`;
+  document.getElementById('pagination').innerHTML = pg;
 }
 
-function renderPagination(){
-  const total=Math.ceil(totalCount/PAGE_SIZE);
-  if(total<=1){document.getElementById('pagination').innerHTML='';return;}
-  let html='';
-  for(let i=1;i<=total;i++){
-    html+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
-  }
-  document.getElementById('pagination').innerHTML=html;
-}
-
-function goPage(n){currentPage=n;loadPosts();}
+function goPage(n){currentPage=n;loadPosts();window.scrollTo(0,0);}
 
 function switchTab(el,tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  currentTab=tab;
-  currentPage=1;
-  loadPosts();
+  currentTab=tab; currentPage=1; loadPosts();
 }
 
 async function openPost(id){
-  await api(`posts?id=eq.${id}`,{method:'PATCH',prefer:'return=minimal',body:{view_count:null},headers:{'Prefer':'return=minimal'}});
   const posts = await api(`posts?id=eq.${id}&select=*`);
   if(!posts.length) return;
   currentPost = posts[0];
-  await api(`posts?id=eq.${id}`,{method:'PATCH',prefer:'return=minimal',body:{view_count:currentPost.view_count+1},headers:{'Prefer':'return=minimal'}});
+
+  // 조회수 증가 (별도 RPC 없이 직접 +1)
+  await api(`posts?id=eq.${id}`,{method:'PATCH',prefer:'return=minimal',body:{view_count: currentPost.view_count+1}});
   currentPost.view_count++;
 
   document.getElementById('pvTitle').textContent=(currentPost.tag?`[${currentPost.tag}] `:'')+currentPost.title;
@@ -328,8 +393,12 @@ async function openPost(id){
   document.getElementById('upCnt').textContent=currentPost.up_count;
   document.getElementById('downCnt').textContent=currentPost.down_count;
 
-  await loadComments();
+  // 추천 중복 방지
+  const voted = votedPosts[id];
+  document.getElementById('upBtn').className='react-btn up'+(voted?(' voted'):'');
+  document.getElementById('downBtn').className='react-btn down'+(voted?(' voted'):'');
 
+  await loadComments();
   document.getElementById('boardListWrap').classList.add('hidden');
   document.getElementById('pvWrap').classList.add('show');
   document.getElementById('tabBar').style.display='none';
@@ -341,8 +410,11 @@ async function loadComments(){
   document.getElementById('cmtCount').textContent=cmts.length;
   document.getElementById('commentList').innerHTML = cmts.length
     ? cmts.map(c=>`<div class="cmt-item">
-        <div class="cmt-meta"><span class="cmt-nick-tag">${escHtml(c.nick)}</span><span>${fmtDate(c.created_at)}</span></div>
-        <div class="cmt-text">${escHtml(c.body)}</div>
+        <div class="cmt-left">
+          <div class="cmt-meta"><span class="cmt-nick-tag">${escHtml(c.nick)}</span><span>${fmtDate(c.created_at)}</span></div>
+          <div class="cmt-text">${escHtml(c.body)}</div>
+        </div>
+        <button class="cmt-del-btn" onclick="openDeleteComment(${c.id})">삭제</button>
       </div>`).join('')
     : '<div class="empty">첫 댓글을 달아보세요!</div>';
 }
@@ -351,57 +423,143 @@ function goBack(){
   document.getElementById('boardListWrap').classList.remove('hidden');
   document.getElementById('pvWrap').classList.remove('show');
   document.getElementById('tabBar').style.display='';
-  currentPost=null;
-  loadPosts();
+  currentPost=null; loadPosts();
 }
 
 async function react(type){
   if(!currentPost) return;
+  if(votedPosts[currentPost.id]){ showToast('이미 투표했어요!'); return; }
   const field = type==='up'?'up_count':'down_count';
   const newVal = currentPost[field]+1;
-  await api(`posts?id=eq.${currentPost.id}`,{method:'PATCH',body:{[field]:newVal},headers:{'Prefer':'return=minimal'}});
+  await api(`posts?id=eq.${currentPost.id}`,{method:'PATCH',prefer:'return=minimal',body:{[field]:newVal}});
   currentPost[field]=newVal;
   document.getElementById(type==='up'?'upCnt':'downCnt').textContent=newVal;
+  votedPosts[currentPost.id]=type;
+  localStorage.setItem('votedPosts',JSON.stringify(votedPosts));
+  document.getElementById('upBtn').className='react-btn up voted';
+  document.getElementById('downBtn').className='react-btn down voted';
+  showToast(type==='up'?'추천했어요 👍':'비추했어요 👎');
 }
 
 async function submitComment(){
   const text=document.getElementById('cmtText').value.trim();
-  if(!text){alert('댓글 내용을 입력해주세요');return;}
+  if(!text){showToast('댓글 내용을 입력해주세요');return;}
+  const lastCmt = parseInt(localStorage.getItem('lastCmt')||'0');
+  if(Date.now()-lastCmt < CMT_COOLDOWN){
+    showToast(`${Math.ceil((CMT_COOLDOWN-(Date.now()-lastCmt))/1000)}초 후에 댓글을 달 수 있어요`);return;
+  }
   const nick=document.getElementById('cmtNick').value.trim()||randAnon();
+  const pw=document.getElementById('cmtPw').value||'';
   document.getElementById('cmtBtn').disabled=true;
-  await api('comments',{method:'POST',body:{post_id:currentPost.id,nick,body:text},headers:{'Prefer':'return=minimal'}});
-  document.getElementById('cmtText').value='';
-  document.getElementById('cmtNick').value='';
-  document.getElementById('cmtPw').value='';
+  const res = await api('comments',{method:'POST',prefer:'return=minimal',body:{post_id:currentPost.id,nick,body:text,password:pw}});
+  if(res && res.ok===false){ showToast('댓글 등록 실패'); }
+  else {
+    localStorage.setItem('lastCmt',Date.now().toString());
+    document.getElementById('cmtText').value='';
+    document.getElementById('cmtNick').value='';
+    document.getElementById('cmtPw').value='';
+    await loadComments();
+  }
   document.getElementById('cmtBtn').disabled=false;
-  await loadComments();
 }
 
+// 글쓰기
 function openWrite(){document.getElementById('writeModal').classList.add('show');}
 function closeWrite(){document.getElementById('writeModal').classList.remove('show');}
 
 async function submitPost(){
   const title=document.getElementById('wTitle').value.trim();
   const body=document.getElementById('wBody').value.trim();
-  if(!title){alert('제목을 입력해주세요');return;}
-  if(!body){alert('내용을 입력해주세요');return;}
+  if(!title){showToast('제목을 입력해주세요');return;}
+  if(!body){showToast('내용을 입력해주세요');return;}
+  const lastWrite = parseInt(localStorage.getItem('lastWrite')||'0');
+  if(Date.now()-lastWrite < WRITE_COOLDOWN){
+    showToast(`${Math.ceil((WRITE_COOLDOWN-(Date.now()-lastWrite))/1000)}초 후에 글을 쓸 수 있어요`);return;
+  }
   const nick=document.getElementById('wNick').value.trim()||randAnon();
+  const pw=document.getElementById('wPw').value||'';
   const tag=document.getElementById('wTag').value;
   const isNotice=tag==='공지';
-  document.getElementById('submitBtn').disabled=true;
-  document.getElementById('submitBtn').textContent='등록 중...';
-  await api('posts',{method:'POST',body:{tag:isNotice?'':tag,title,author:nick,body,is_notice:isNotice},headers:{'Prefer':'return=minimal'}});
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='등록 중...';
+  const res = await api('posts',{method:'POST',prefer:'return=minimal',body:{tag:isNotice?'':tag,title,author:nick,body,is_notice:isNotice,password:pw,view_count:0,up_count:0,down_count:0}});
+  btn.disabled=false; btn.textContent='등록';
+  if(res && res.status && res.status>=400){ showToast('등록 실패. 다시 시도해주세요'); return; }
+  localStorage.setItem('lastWrite',Date.now().toString());
   closeWrite();
   ['wTitle','wBody','wNick','wPw'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('wTag').selectedIndex=0;
-  document.getElementById('submitBtn').disabled=false;
-  document.getElementById('submitBtn').textContent='등록';
-  currentPage=1;
-  loadPosts();
+  currentPage=1; loadPosts();
+  showToast('글이 등록됐어요!');
 }
 
-function escHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// 수정
+function openEdit(){
+  if(!currentPost) return;
+  document.getElementById('eTitle').value=currentPost.title;
+  document.getElementById('eBody').value=currentPost.body;
+  document.getElementById('eTag').value=currentPost.tag||'';
+  document.getElementById('ePw').value='';
+  document.getElementById('editModal').classList.add('show');
+}
+function closeEdit(){document.getElementById('editModal').classList.remove('show');}
+
+async function submitEdit(){
+  const pw=document.getElementById('ePw').value;
+  if(!pw){showToast('비밀번호를 입력해주세요');return;}
+  if(pw!==currentPost.password){showToast('비밀번호가 틀렸어요');return;}
+  const title=document.getElementById('eTitle').value.trim();
+  const body=document.getElementById('eBody').value.trim();
+  const tag=document.getElementById('eTag').value;
+  if(!title||!body){showToast('제목과 내용을 입력해주세요');return;}
+  const btn=document.getElementById('editBtn');
+  btn.disabled=true; btn.textContent='수정 중...';
+  await api(`posts?id=eq.${currentPost.id}`,{method:'PATCH',prefer:'return=minimal',body:{title,body,tag}});
+  btn.disabled=false; btn.textContent='수정 완료';
+  closeEdit();
+  currentPost.title=title; currentPost.body=body; currentPost.tag=tag;
+  document.getElementById('pvTitle').textContent=(tag?`[${tag}] `:'')+title;
+  document.getElementById('pvBody').textContent=body;
+  showToast('수정됐어요!');
+}
+
+// 삭제
+function openDeletePost(){
+  deleteTarget={type:'post'};
+  document.getElementById('deleteModalTitle').textContent='글 삭제';
+  document.getElementById('delPw').value='';
+  document.getElementById('deleteModal').classList.add('show');
+}
+function openDeleteComment(id){
+  deleteTarget={type:'comment',id};
+  document.getElementById('deleteModalTitle').textContent='댓글 삭제';
+  document.getElementById('delPw').value='';
+  document.getElementById('deleteModal').classList.add('show');
+}
+function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('show');}
+
+async function confirmDelete(){
+  const pw=document.getElementById('delPw').value;
+  if(!pw){showToast('비밀번호를 입력해주세요');return;}
+  const btn=document.getElementById('delBtn');
+  btn.disabled=true;
+
+  if(deleteTarget.type==='post'){
+    if(pw!==currentPost.password){showToast('비밀번호가 틀렸어요');btn.disabled=false;return;}
+    await api(`posts?id=eq.${currentPost.id}`,{method:'DELETE',prefer:'return=minimal'});
+    closeDeleteModal();
+    showToast('글이 삭제됐어요');
+    goBack();
+  } else {
+    // 댓글: DB에서 비번 확인 후 삭제
+    const cmts = await api(`comments?id=eq.${deleteTarget.id}&select=password`);
+    if(!cmts.length||cmts[0].password!==pw){showToast('비밀번호가 틀렸어요');btn.disabled=false;return;}
+    await api(`comments?id=eq.${deleteTarget.id}`,{method:'DELETE',prefer:'return=minimal'});
+    closeDeleteModal();
+    showToast('댓글이 삭제됐어요');
+    await loadComments();
+  }
+  btn.disabled=false;
 }
 
 loadPosts();
