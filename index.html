@@ -237,47 +237,52 @@ async function api(path, opts={}){
 
 async function loadPosts(){
   document.getElementById('postList').innerHTML='<div class="loading">불러오는 중...</div>';
-  let filter = currentTab==='전체' ? '' : `&tag=eq.${encodeURIComponent(currentTab)}`;
+  const filter = currentTab==='전체' ? '' : `&tag=eq.${encodeURIComponent(currentTab)}`;
   const from=(currentPage-1)*PAGE_SIZE, to=from+PAGE_SIZE-1;
 
-  const countRes = await fetch(
-    SUPABASE_URL+`/rest/v1/posts?select=id${filter}&is_notice=eq.false`,
-    {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'count=exact','Range':`0-0`}}
-  );
-  const cRange = countRes.headers.get('content-range');
-  totalCount = cRange ? parseInt(cRange.split('/')[1])||0 : 0;
+  try {
+    const notices = await api(`posts?select=*&is_notice=eq.true${filter}&order=created_at.desc`);
+    const posts = await api(`posts?select=*&is_notice=eq.false${filter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${from}`);
+    const comments = await api('comments?select=post_id&limit=1000');
 
-  const notices = await api(`posts?select=*&is_notice=eq.true${filter}&order=created_at.desc`);
-  const posts = await api(`posts?select=*&is_notice=eq.false${filter}&order=created_at.desc&range=${from}-${to}`, {headers:{'Range':`${from}-${to}`}});
-  const comments = await api('comments?select=post_id') || [];
+    const safeNotices = Array.isArray(notices) ? notices : [];
+    const safePosts = Array.isArray(posts) ? posts : [];
+    const safeComments = Array.isArray(comments) ? comments : [];
 
-  const cmtMap={};
-  if(Array.isArray(comments)) comments.forEach(c=>{cmtMap[c.post_id]=(cmtMap[c.post_id]||0)+1;});
+    totalCount = safePosts.length + (currentPage > 1 ? from : 0);
 
-  const allPosts = currentPage===1 ? [...notices,...posts] : posts;
+    const cmtMap={};
+    safeComments.forEach(c=>{cmtMap[c.post_id]=(cmtMap[c.post_id]||0)+1;});
 
-  if(!allPosts.length){
-    document.getElementById('postList').innerHTML='<div class="empty">등록된 글이 없어요</div>';
+    const allPosts = currentPage===1 ? [...safeNotices,...safePosts] : safePosts;
+
+    if(!allPosts.length){
+      document.getElementById('postList').innerHTML='<div class="empty">등록된 글이 없어요</div>';
+      renderPagination();
+      return;
+    }
+
+    let idx = from + safePosts.length;
+    document.getElementById('postList').innerHTML = allPosts.map((p,i)=>{
+      const isNotice = p.is_notice;
+      const num = isNotice ? '<span class="badge badge-notice">공지</span>' : (idx - (i - (currentPage===1 ? safeNotices.length : 0)));
+      const hot = p.up_count>=10 ? '<span class="badge badge-hot">HOT</span>' : '';
+      const tag = p.tag ? `<span class="badge badge-tag">${p.tag}</span>` : '';
+      const cmt = cmtMap[p.id] ? `<span class="cmt-cnt">[${cmtMap[p.id]}]</span>` : '';
+      return `<div class="post-row" onclick="openPost(${p.id})">
+        <span class="post-num">${num}</span>
+        <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}</span>
+        <span class="post-author">${escHtml(p.author)}</span>
+        <span class="post-date">${fmtDate(p.created_at)}</span>
+        <span class="post-view">${p.view_count}</span>
+      </div>`;
+    }).join('');
+
     renderPagination();
-    return;
+  } catch(e) {
+    console.error('loadPosts error:', e);
+    document.getElementById('postList').innerHTML='<div class="empty">불러오기 실패. 새로고침 해주세요.</div>';
   }
-
-  document.getElementById('postList').innerHTML = allPosts.map((p,i)=>{
-    const num = p.is_notice ? '<span class="badge badge-notice">공지</span>'
-      : (totalCount - (currentPage-1)*PAGE_SIZE - (i - (currentPage===1?notices.length:0)));
-    const hot = p.up_count>=10 ? '<span class="badge badge-hot">HOT</span>' : '';
-    const tag = p.tag ? `<span class="badge badge-tag">${p.tag}</span>` : '';
-    const cmt = cmtMap[p.id] ? `<span class="cmt-cnt">[${cmtMap[p.id]}]</span>` : '';
-    return `<div class="post-row" onclick="openPost(${p.id})">
-      <span class="post-num">${num}</span>
-      <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}</span>
-      <span class="post-author">${escHtml(p.author)}</span>
-      <span class="post-date">${fmtDate(p.created_at)}</span>
-      <span class="post-view">${p.view_count}</span>
-    </div>`;
-  }).join('');
-
-  renderPagination();
 }
 
 function renderPagination(){
