@@ -219,20 +219,23 @@ function fmtDate(iso){
 }
 
 async function api(path, opts={}){
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer '+SUPABASE_KEY,
+    'Content-Type': 'application/json',
+  };
+  if(opts.prefer) headers['Prefer'] = opts.prefer;
   const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
-    headers:{
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer '+SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': opts.prefer||'',
-      ...opts.headers
-    },
+    headers,
     method: opts.method||'GET',
     body: opts.body ? JSON.stringify(opts.body) : undefined
   });
   if(opts.method==='POST'||opts.method==='PATCH') return res;
+  if(!res.ok){ console.error('API error', res.status, path); return []; }
   const text = await res.text();
-  return text ? JSON.parse(text) : [];
+  if(!text) return [];
+  const parsed = JSON.parse(text);
+  return Array.isArray(parsed) ? parsed : [];
 }
 
 async function loadPosts(){
@@ -241,9 +244,13 @@ async function loadPosts(){
   const from=(currentPage-1)*PAGE_SIZE, to=from+PAGE_SIZE-1;
 
   try {
-    const notices = await api(`posts?select=*&is_notice=eq.true${filter}&order=created_at.desc`);
-    const posts = await api(`posts?select=*&is_notice=eq.false${filter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${from}`);
+    const noticeUrl = `posts?select=*&is_notice=eq.true${filter}&order=created_at.desc`;
+    const postUrl = `posts?select=*&is_notice=eq.false${filter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${from}`;
+    console.log('fetching:', postUrl);
+    const notices = await api(noticeUrl);
+    const posts = await api(postUrl);
     const comments = await api('comments?select=post_id&limit=1000');
+    console.log('notices:', notices, 'posts:', posts);
 
     const safeNotices = Array.isArray(notices) ? notices : [];
     const safePosts = Array.isArray(posts) ? posts : [];
