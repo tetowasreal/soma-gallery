@@ -584,17 +584,7 @@ window.addEventListener('load', ()=>{
   }
 });
 
-// URL #admin으로 진입
-if(location.hash === '#admin'){
-  if(isAdmin){ showToast('이미 어드민이에요 👑'); }
-  else {
-    setTimeout(()=>{
-      document.getElementById('adminModal').classList.add('show');
-      document.getElementById('adminPwInput').focus();
-    }, 300);
-  }
-  history.replaceState(null,'',location.pathname);
-}
+
 
 document.addEventListener('keydown', e=>{
   if(e.key === KONAMI[konamiIdx]){
