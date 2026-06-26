@@ -542,10 +542,12 @@ function closeDeleteModal(){document.getElementById('deleteModal').classList.rem
 async function confirmDelete(){
   const pw=document.getElementById('delPw').value;
   if(!pw){showToast('비밀번호를 입력해주세요');return;}
+  if(pw.trim()===''){showToast('비밀번호를 입력해주세요');return;}
   const btn=document.getElementById('delBtn');
   btn.disabled=true;
 
   if(deleteTarget.type==='post'){
+    if(!currentPost.password){showToast('이 글은 비밀번호가 없어요. 어드민만 삭제할 수 있어요');btn.disabled=false;return;}
     if(pw!==currentPost.password){showToast('비밀번호가 틀렸어요');btn.disabled=false;return;}
     await api(`posts?id=eq.${currentPost.id}`,{method:'DELETE',prefer:'return=minimal'});
     closeDeleteModal();
@@ -554,7 +556,9 @@ async function confirmDelete(){
   } else {
     // 댓글: DB에서 비번 확인 후 삭제
     const cmts = await api(`comments?id=eq.${deleteTarget.id}&select=password`);
-    if(!cmts.length||cmts[0].password!==pw){showToast('비밀번호가 틀렸어요');btn.disabled=false;return;}
+    if(!cmts.length){showToast('댓글을 찾을 수 없어요');btn.disabled=false;return;}
+    if(!cmts[0].password){showToast('이 댓글은 비밀번호가 없어요. 어드민만 삭제할 수 있어요');btn.disabled=false;return;}
+    if(cmts[0].password!==pw){showToast('비밀번호가 틀렸어요');btn.disabled=false;return;}
     await api(`comments?id=eq.${deleteTarget.id}`,{method:'DELETE',prefer:'return=minimal'});
     closeDeleteModal();
     showToast('댓글이 삭제됐어요');
@@ -567,8 +571,6 @@ loadPosts();
 
 // ===== 어드민 =====
 const ADMIN_PASSWORD = '네오암스트롱사이클론제트암스트롱포';
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
-let konamiIdx = 0;
 let isAdmin = sessionStorage.getItem('adminAuth') === '1';
 if(isAdmin) enableAdminUI();
 
@@ -586,20 +588,7 @@ window.addEventListener('load', ()=>{
 
 
 
-document.addEventListener('keydown', e=>{
-  if(e.key === KONAMI[konamiIdx]){
-    konamiIdx++;
-    if(konamiIdx === KONAMI.length){
-      konamiIdx = 0;
-      if(isAdmin){ showToast('이미 어드민이에요 👑'); return; }
-      document.getElementById('adminModal').classList.add('show');
-      document.getElementById('adminPwInput').value='';
-      setTimeout(()=>document.getElementById('adminPwInput').focus(),100);
-    }
-  } else {
-    konamiIdx = 0;
-  }
-});
+
 
 function adminLogin(){
   const pw = document.getElementById('adminPwInput').value;
