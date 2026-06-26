@@ -573,14 +573,16 @@ let isAdmin = sessionStorage.getItem('adminAuth') === '1';
 if(isAdmin) enableAdminUI();
 
 // URL 해시로 어드민 진입: #jotaro
-if(location.hash === '#jotaro'){
-  history.replaceState(null,'',location.pathname);
-  if(isAdmin){ showToast('이미 어드민이에요 👑'); }
-  else {
-    document.getElementById('adminModal').classList.add('show');
-    setTimeout(()=>document.getElementById('adminPwInput').focus(),100);
+window.addEventListener('load', ()=>{
+  if(location.hash === '#jotaro'){
+    history.replaceState(null,'',location.pathname);
+    if(isAdmin){ showToast('이미 어드민이에요 👑'); }
+    else {
+      document.getElementById('adminModal').classList.add('show');
+      setTimeout(()=>document.getElementById('adminPwInput').focus(),100);
+    }
   }
-}
+});
 
 // URL #admin으로 진입
 if(location.hash === '#admin'){
