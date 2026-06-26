@@ -349,9 +349,10 @@ async function loadPosts(){
     const hot = p.up_count>=10 ? '<span class="badge badge-hot">HOT</span>' : '';
     const tag = p.tag ? `<span class="badge badge-tag">${escHtml(p.tag)}</span>` : '';
     const cmt = cmtMap[p.id] ? `<span class="cmt-cnt">[${cmtMap[p.id]}]</span>` : '';
+    const adminDel = isAdmin ? `<button onclick="adminDeletePost(${p.id},event)" style="margin-left:6px;font-size:11px;padding:1px 7px;background:#c0392b;color:#fff;border:none;border-radius:4px;cursor:pointer;flex-shrink:0">삭제</button>` : '';
     return `<div class="post-row" onclick="openPost(${p.id})">
       <span class="post-num">${rowNum}</span>
-      <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}</span>
+      <span class="post-title-cell">${hot}${tag}<span class="post-title">${escHtml(p.title)}</span>${cmt}${adminDel}</span>
       <span class="post-author">${escHtml(p.author)}</span>
       <span class="post-date">${fmtDate(p.created_at)}</span>
       <span class="post-view">${p.view_count}</span>
@@ -414,7 +415,7 @@ async function loadComments(){
           <div class="cmt-meta"><span class="cmt-nick-tag">${escHtml(c.nick)}</span><span>${fmtDate(c.created_at)}</span></div>
           <div class="cmt-text">${escHtml(c.body)}</div>
         </div>
-        <button class="cmt-del-btn" onclick="openDeleteComment(${c.id})">삭제</button>
+        <button class="cmt-del-btn" onclick="isAdmin ? adminDeleteComment(${c.id}) : openDeleteComment(${c.id})">${isAdmin ? '🗑️ 강제삭제' : '삭제'}</button>
       </div>`).join('')
     : '<div class="empty">첫 댓글을 달아보세요!</div>';
 }
@@ -563,6 +564,102 @@ async function confirmDelete(){
 }
 
 loadPosts();
+
+// ===== 어드민 =====
+const ADMIN_PASSWORD = '네오암스트롱사이클론제트암스트롱포';
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+let konamiIdx = 0;
+let isAdmin = sessionStorage.getItem('adminAuth') === '1';
+if(isAdmin) enableAdminUI();
+
+document.addEventListener('keydown', e=>{
+  if(e.key === KONAMI[konamiIdx]){
+    konamiIdx++;
+    if(konamiIdx === KONAMI.length){
+      konamiIdx = 0;
+      if(isAdmin){ showToast('이미 어드민이에요 👑'); return; }
+      document.getElementById('adminModal').classList.add('show');
+      document.getElementById('adminPwInput').value='';
+      setTimeout(()=>document.getElementById('adminPwInput').focus(),100);
+    }
+  } else {
+    konamiIdx = 0;
+  }
+});
+
+function adminLogin(){
+  const pw = document.getElementById('adminPwInput').value;
+  if(pw === ADMIN_PASSWORD){
+    isAdmin = true;
+    sessionStorage.setItem('adminAuth','1');
+    document.getElementById('adminModal').classList.remove('show');
+    enableAdminUI();
+    showToast('어드민 모드 활성화 👑');
+    loadPosts();
+  } else {
+    showToast('틀렸어요!');
+    document.getElementById('adminPwInput').value='';
+  }
+}
+
+function adminLogout(){
+  isAdmin = false;
+  sessionStorage.removeItem('adminAuth');
+  document.getElementById('adminBar').style.display='none';
+  showToast('어드민 로그아웃');
+  loadPosts();
+}
+
+function enableAdminUI(){
+  document.getElementById('adminBar').style.display='flex';
+}
+
+async function adminDeletePost(id, e){
+  e.stopPropagation();
+  if(!confirm('이 글을 삭제할까요?')) return;
+  await api(`posts?id=eq.${id}`,{method:'DELETE',prefer:'return=minimal'});
+  showToast('글 삭제됨 👑');
+  loadPosts();
+}
+
+async function adminDeleteComment(id){
+  if(!confirm('이 댓글을 삭제할까요?')) return;
+  await api(`comments?id=eq.${id}`,{method:'DELETE',prefer:'return=minimal'});
+  showToast('댓글 삭제됨 👑');
+  await loadComments();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp = document.getElementById('adminPwInput');
+  if(inp) inp.addEventListener('keydown',e=>{ if(e.key==='Enter') adminLogin(); });
+});
 </script>
+
+<!-- 어드민 로그인 모달 -->
+<div class="modal-bg" id="adminModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head">
+      <h2>🔐 어드민 인증</h2>
+      <button class="modal-close" onclick="document.getElementById('adminModal').classList.remove('show')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>어드민 암호</label>
+        <input type="password" id="adminPwInput" placeholder="암호를 입력하세요">
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="document.getElementById('adminModal').classList.remove('show')">취소</button>
+        <button class="btn btn-primary" onclick="adminLogin()">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 어드민 상태 표시바 -->
+<div id="adminBar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;color:#fff;padding:8px 18px;font-size:13px;z-index:200;align-items:center;justify-content:space-between;gap:10px">
+  <span>👑 어드민 모드 — 모든 글/댓글 삭제 가능</span>
+  <button class="btn" style="font-size:12px;padding:4px 12px;background:#444;color:#fff;border-color:#666" onclick="adminLogout()">로그아웃</button>
+</div>
+
 </body>
 </html>
